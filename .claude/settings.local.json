@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find:*)",
+      "Bash(ls:*)",
+      "Bash(mkdir:*)",
+      "Bash(~/.npm-global/bin/claude:*)",
+      "Bash(chmod:*)",
+      "Bash(./build.sh:*)",
+      "Bash(tar:*)",
+      "Bash(python3:*)"
+    ],
+    "deny": []
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "supabase",
+    "playwright",
+    "github",
+    "memory",
+    "brave-search",
+    "puppeteer",
+    "context7",
+    "browser-tools",
+    "taskmanager",
+    "duckduckgo-search",
+    "taskmaster-ai"
+  ]
+}

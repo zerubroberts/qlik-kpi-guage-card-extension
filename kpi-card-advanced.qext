@@ -1,0 +1,15 @@
+{
+    "name": "KPI Card Advanced",
+    "description": "Modern KPI Card with donut and linear gauges, expandable line charts, and customizable styling",
+    "type": "visualization",
+    "version": "1.0.0",
+    "icon": "gauge-chart",
+    "author": "KPI Card Advanced",
+    "homepage": "",
+    "keywords": "qlik-sense, visualization, kpi, gauge, chart",
+    "license": "MIT",
+    "repository": "",
+    "dependencies": {
+        "qlik-sense": ">=3.0.x"
+    }
+}

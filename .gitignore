@@ -1,0 +1,45 @@
+# Build outputs
+build/
+dist/
+*.zip
+*.tar.gz
+
+# Screenshots and images
+screenshots/
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.svg
+
+# Development files
+node_modules/
+*.log
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# IDE files
+.vscode/
+.idea/
+*.sublime-*
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp
+
+# Qlik specific
+*.qvf
+*.qvd
+*.qvw
+*.qvs
+.qlik/
+
+# Documentation build
+docs/_build/
+docs/_static/
+docs/_templates/

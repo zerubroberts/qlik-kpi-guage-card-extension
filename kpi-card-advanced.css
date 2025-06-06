@@ -1,0 +1,358 @@
+.kpi-card-advanced-container {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.kpi-card-advanced-container * {
+    box-sizing: border-box;
+}
+
+/* Measure Group Styles */
+.measure-group {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+.group-title {
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+    margin: 0 0 16px 0;
+    opacity: 0;
+    animation: fadeIn 0.5s ease forwards;
+}
+
+/* Individual Measure Styles */
+.measure-item {
+    background: white;
+    border-radius: 8px;
+    padding: 12px 16px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    opacity: 0;
+    animation: slideIn 0.5s ease forwards;
+}
+
+.measure-item:nth-child(1) { animation-delay: 0.05s; }
+.measure-item:nth-child(2) { animation-delay: 0.1s; }
+.measure-item:nth-child(3) { animation-delay: 0.15s; }
+.measure-item:nth-child(4) { animation-delay: 0.2s; }
+.measure-item:nth-child(5) { animation-delay: 0.25s; }
+.measure-item:nth-child(6) { animation-delay: 0.3s; }
+.measure-item:nth-child(7) { animation-delay: 0.35s; }
+.measure-item:nth-child(8) { animation-delay: 0.4s; }
+.measure-item:nth-child(9) { animation-delay: 0.45s; }
+.measure-item:nth-child(10) { animation-delay: 0.5s; }
+
+.measure-item.expandable {
+    cursor: pointer;
+}
+
+.measure-item.expandable:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    background: linear-gradient(135deg, #f9f9f9 0%, #ffffff 100%);
+}
+
+.measure-item.expanded {
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    background: linear-gradient(135deg, #ffffff 0%, #f8fffe 100%);
+    z-index: 10;
+    transform: scale(1.02);
+}
+
+/* Layout Containers */
+.measure-horizontal {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.measure-vertical {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.gauge-section {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* Title Styles */
+.measure-title {
+    font-weight: 500;
+    flex-shrink: 0;
+    transition: color 0.3s ease;
+    white-space: nowrap;
+}
+
+.measure-horizontal .measure-title {
+    min-width: 150px;
+}
+
+.measure-vertical .measure-title {
+    margin-bottom: 4px;
+}
+
+.measure-item:hover .measure-title {
+    color: #333;
+}
+
+/* Linear Gauge Styles */
+.linear-gauge-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+}
+
+.linear-gauge {
+    flex: 1;
+    border-radius: 50px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.linear-gauge-fill {
+    border-radius: 50px;
+    position: relative;
+    overflow: hidden;
+}
+
+.linear-gauge-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transform: translateX(-100%);
+    animation: shimmer 2s infinite;
+}
+
+.measure-item:hover .linear-gauge {
+    transform: scaleY(1.2);
+}
+
+.gauge-value {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    min-width: 50px;
+    text-align: right;
+    transition: all 0.3s ease;
+}
+
+.measure-item:hover .gauge-value {
+    transform: scale(1.05);
+}
+
+/* Comparison Indicator Styles */
+.comparison-indicator {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: 16px;
+    font-size: 12px;
+    font-weight: 500;
+    color: white;
+    white-space: nowrap;
+    transition: all 0.3s ease;
+    animation: popIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.comparison-indicator:hover {
+    transform: scale(1.05);
+}
+
+/* Line Chart Styles */
+.line-chart-container {
+    margin-top: 16px;
+    padding: 16px;
+    background: linear-gradient(135deg, #fafafa 0%, #f0f8ff 100%);
+    border-radius: 12px;
+    overflow: visible;
+    position: relative;
+    min-height: 200px;
+    border: 1px solid #e8e8e8;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.line-chart {
+    position: relative;
+    opacity: 0;
+    animation: fadeIn 0.5s ease forwards;
+    min-height: 150px;
+}
+
+.line-chart svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+}
+
+.chart-dot {
+    cursor: pointer;
+    transition: r 0.2s ease, fill 0.2s ease;
+}
+
+.chart-dot:hover {
+    r: 6;
+    filter: brightness(1.2);
+}
+
+/* Modern Tooltip Styles */
+.chart-tooltip {
+    position: absolute;
+    pointer-events: none;
+    z-index: 1000;
+    animation: tooltipIn 0.2s ease;
+    font-family: inherit;
+}
+
+.chart-tooltip.modern-tooltip {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.chart-tooltip .tooltip-title {
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    opacity: 0.9;
+}
+
+.chart-tooltip .tooltip-value {
+    font-size: 14px;
+    font-weight: 700;
+    opacity: 1;
+}
+
+/* Legacy tooltip support */
+.chart-tooltip strong {
+    color: inherit;
+    display: block;
+    margin-bottom: 4px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes popIn {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+    60% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes shimmer {
+    to {
+        transform: translateX(100%);
+    }
+}
+
+@keyframes tooltipIn {
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Scrollbar Styles */
+.kpi-card-advanced-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.kpi-card-advanced-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.kpi-card-advanced-container::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 4px;
+    transition: background 0.3s ease;
+}
+
+.kpi-card-advanced-container::-webkit-scrollbar-thumb:hover {
+    background: #999;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .measure-horizontal {
+        flex-wrap: wrap;
+    }
+    
+    .measure-horizontal .measure-title {
+        width: 100%;
+        min-width: unset;
+        margin-bottom: 8px;
+    }
+    
+    .gauge-section {
+        width: 100%;
+    }
+    
+    .comparison-indicator {
+        margin-top: 8px;
+    }
+}
+
+/* Loading state */
+.kpi-card-advanced-container.loading .measure-item {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+/* Focus styles for accessibility */
+.measure-item.expandable:focus {
+    outline: 2px solid #007A78;
+    outline-offset: 2px;
+}
+
+/* Print styles */
+@media print {
+    .measure-item {
+        break-inside: avoid;
+    }
+    
+    .line-chart-container {
+        display: none !important;
+    }
+}
