@@ -87,10 +87,10 @@ function(qlik, $, properties, cssContent) {
             // Create main container
             var $container = $('<div class="kpi-card-advanced-container"></div>');
             $container.css({
-                'background-color': props.backgroundColor,
-                'border': props.borderWidth + 'px solid ' + props.borderColor,
-                'border-radius': props.borderRadius + 'px',
-                'box-shadow': props.boxShadow,
+                'background-color': getColorValue(props.backgroundColor, '#FFFFFF'),
+                'border': (props.borderWidth || 1) + 'px solid ' + getColorValue(props.borderColor, '#E0E0E0'),
+                'border-radius': (props.borderRadius || 12) + 'px',
+                'box-shadow': props.boxShadow || '0 2px 8px rgba(0,0,0,0.1)',
                 'padding': '20px',
                 'height': '100%',
                 'overflow-y': 'auto',
@@ -207,8 +207,8 @@ function(qlik, $, properties, cssContent) {
     function createGroup(group, groupIndex, measureValues, hypercube, measureConfigs, props, self, layout, dimensionData) {
         var $group = $('<div class="measure-group"></div>');
         $group.css({
-            'background-color': group.backgroundColor,
-            'border': '1px solid ' + group.borderColor,
+            'background-color': getColorValue(group.backgroundColor, '#F5F5F5'),
+            'border': '1px solid ' + getColorValue(group.borderColor, '#E0E0E0'),
             'border-radius': '8px',
             'padding': '16px'
         });
@@ -248,19 +248,15 @@ function(qlik, $, properties, cssContent) {
             $('<div class="measure-vertical"></div>') : 
             $('<div class="measure-horizontal"></div>');
         
-        // Add title
+        // Create title section with optional icon
         var title = config.title || measureInfo.qFallbackTitle;
-        if (title) {
-            var $title = $('<span class="measure-title"></span>');
-            $title.text(title);
-            $title.css({
-                'color': props.titleColor || '#666666',
-                'font-size': (props.titleFontSize || 14) + 'px',
-                'font-weight': props.titleFontWeight || '500'
-            });
+        var $titleSection = null;
+        
+        if (title || (config.showIcon && config.iconType)) {
+            $titleSection = createTitleWithIcon(title, config, props);
             
             if (props.titlePosition === 'top') {
-                $container.append($title);
+                $container.append($titleSection);
             }
         }
         
@@ -271,8 +267,8 @@ function(qlik, $, properties, cssContent) {
         var $gaugeContainer = $('<div class="linear-gauge-container"></div>');
         var percentage = Math.min(Math.max(value * 100, 0), 100);
         
-        var gaugeColor = config.gaugeColor || props.defaultGaugeColor || '#007A78';
-        var gaugeBackgroundColor = props.defaultGaugeBackgroundColor || '#F0F0F0';
+        var gaugeColor = getColorValue(config.gaugeColor, null) || getColorValue(props.defaultGaugeColor, '#007A78');
+        var gaugeBackgroundColor = getColorValue(props.defaultGaugeBackgroundColor, '#F0F0F0');
         var $gauge = createLinearGauge(percentage, gaugeColor, gaugeBackgroundColor, props.gaugeHeight || 8, props.animationDuration || 500);
         $gaugeContainer.append($gauge);
         
@@ -291,8 +287,8 @@ function(qlik, $, properties, cssContent) {
         }
         
         // Add components to container based on layout
-        if (props.titlePosition === 'left' && title) {
-            $container.append($title);
+        if (props.titlePosition === 'left' && $titleSection) {
+            $container.append($titleSection);
         }
         $container.append($gaugeSection);
         
@@ -382,7 +378,9 @@ function(qlik, $, properties, cssContent) {
     
     function createComparisonIndicator(config) {
         var isPositive = config.comparisonValue >= 0;
-        var color = isPositive ? config.positiveColor : config.negativeColor;
+        var positiveColor = getColorValue(config.positiveColor, '#52C41A');
+        var negativeColor = getColorValue(config.negativeColor, '#FF4D4F');
+        var color = isPositive ? positiveColor : negativeColor;
         var icon = isPositive ? '▲' : '▼';
         
         var $indicator = $('<div class="comparison-indicator"></div>');
@@ -390,6 +388,75 @@ function(qlik, $, properties, cssContent) {
         $indicator.html(icon + ' ' + Math.abs(config.comparisonValue) + '%');
         
         return $indicator;
+    }
+    
+    function createTitleWithIcon(title, config, props) {
+        var showIcon = config.showIcon && config.iconType;
+        var iconPosition = config.iconPosition || 'before';
+        var iconSize = config.iconSize || 16;
+        var iconColor = getColorValue(config.iconColor, '#666666');
+        
+        if (iconPosition === 'above' && showIcon) {
+            // Large icon above title layout
+            var $titleContainer = $('<div class="title-with-icon-above"></div>');
+            
+            if (showIcon) {
+                var $icon = $('<span class="measure-icon-large"></span>');
+                $icon.addClass(config.iconType);
+                $icon.css({
+                    'color': iconColor,
+                    'font-size': Math.max(iconSize * 1.5, 24) + 'px',
+                    'display': 'block',
+                    'text-align': 'center',
+                    'margin-bottom': '8px'
+                });
+                $titleContainer.append($icon);
+            }
+            
+            if (title) {
+                var $title = $('<span class="measure-title"></span>');
+                $title.text(title);
+                $title.css({
+                    'color': getColorValue(props.titleColor, '#666666'),
+                    'font-size': (props.titleFontSize || 14) + 'px',
+                    'font-weight': props.titleFontWeight || '500',
+                    'display': 'block',
+                    'text-align': 'center'
+                });
+                $titleContainer.append($title);
+            }
+            
+            return $titleContainer;
+        } else {
+            // Icon before title layout (or title only)
+            var $titleContainer = $('<div class="title-with-icon-before"></div>');
+            
+            if (showIcon) {
+                var $icon = $('<span class="measure-icon"></span>');
+                $icon.addClass(config.iconType);
+                $icon.css({
+                    'color': iconColor,
+                    'font-size': iconSize + 'px',
+                    'margin-right': '8px',
+                    'vertical-align': 'middle'
+                });
+                $titleContainer.append($icon);
+            }
+            
+            if (title) {
+                var $title = $('<span class="measure-title"></span>');
+                $title.text(title);
+                $title.css({
+                    'color': getColorValue(props.titleColor, '#666666'),
+                    'font-size': (props.titleFontSize || 14) + 'px',
+                    'font-weight': props.titleFontWeight || '500',
+                    'vertical-align': 'middle'
+                });
+                $titleContainer.append($title);
+            }
+            
+            return $titleContainer;
+        }
     }
     
     function createLineChart($container, dimensionData, measureIndex, config, props) {
@@ -490,10 +557,11 @@ function(qlik, $, properties, cssContent) {
         var svg = '<svg width="' + width + '" height="' + height + '" xmlns="http://www.w3.org/2000/svg" style="display: block;">';
         
         // Create gradient
+        var lineColor = getColorValue(props.lineColor, '#007A78');
         var gradientId = 'gradient-' + measureIndex + '-' + Date.now();
         svg += '<defs><linearGradient id="' + gradientId + '" x1="0%" y1="0%" x2="0%" y2="100%">';
-        svg += '<stop offset="0%" style="stop-color:' + (props.lineColor || '#007A78') + ';stop-opacity:0.3" />';
-        svg += '<stop offset="100%" style="stop-color:' + (props.lineColor || '#007A78') + ';stop-opacity:0.1" />';
+        svg += '<stop offset="0%" style="stop-color:' + lineColor + ';stop-opacity:0.3" />';
+        svg += '<stop offset="100%" style="stop-color:' + lineColor + ';stop-opacity:0.1" />';
         svg += '</linearGradient></defs>';
         
         // Create chart background
@@ -508,11 +576,12 @@ function(qlik, $, properties, cssContent) {
         }
         
         // Create axes (only if enabled)
+        var axisColor = getColorValue(props.axisColor, '#DDDDDD');
         if (props.showYAxis) {
-            svg += '<line x1="' + margin.left + '" y1="' + margin.top + '" x2="' + margin.left + '" y2="' + (margin.top + chartHeight) + '" stroke="' + (props.axisColor || '#DDDDDD') + '" stroke-width="1" />';
+            svg += '<line x1="' + margin.left + '" y1="' + margin.top + '" x2="' + margin.left + '" y2="' + (margin.top + chartHeight) + '" stroke="' + axisColor + '" stroke-width="1" />';
         }
         if (props.showXAxis) {
-            svg += '<line x1="' + margin.left + '" y1="' + (margin.top + chartHeight) + '" x2="' + (margin.left + chartWidth) + '" y2="' + (margin.top + chartHeight) + '" stroke="' + (props.axisColor || '#DDDDDD') + '" stroke-width="1" />';
+            svg += '<line x1="' + margin.left + '" y1="' + (margin.top + chartHeight) + '" x2="' + (margin.left + chartWidth) + '" y2="' + (margin.top + chartHeight) + '" stroke="' + axisColor + '" stroke-width="1" />';
         }
         
         // Calculate points and create paths
@@ -561,13 +630,12 @@ function(qlik, $, properties, cssContent) {
         
         // Add line path (based on chart type)
         if ((props.chartType === 'line' || props.chartType === 'line-area') && pathData) {
-            svg += '<path d="' + pathData + '" fill="none" stroke="' + (props.lineColor || '#007A78') + '" stroke-width="' + (props.lineWidth || 3) + '" stroke-linecap="round" stroke-linejoin="round" />';
+            svg += '<path d="' + pathData + '" fill="none" stroke="' + lineColor + '" stroke-width="' + (props.lineWidth || 3) + '" stroke-linecap="round" stroke-linejoin="round" />';
         }
         
         // Add data points if enabled
         if (props.showDataPoints !== false) {
             var pointSize = props.dataPointSize || 5;
-            var lineColor = props.lineColor || '#007A78';
             points.forEach(function(point, index) {
                 // Use the original qText if available, otherwise format the value
                 var displayValue = point.data.rawData && point.data.rawData.qText ? 
@@ -630,8 +698,8 @@ function(qlik, $, properties, cssContent) {
                 var $tooltip = $('<div class="chart-tooltip modern-tooltip"></div>');
                 $tooltip.html('<div class="tooltip-title">' + dimension + '</div><div class="tooltip-value">' + value + '</div>');
                 
-                var bgColor = props.tooltipBackgroundColor || '#2D3748';
-                var textColor = props.tooltipTextColor || '#FFFFFF';
+                var bgColor = getColorValue(props.tooltipBackgroundColor, '#2D3748');
+                var textColor = getColorValue(props.tooltipTextColor, '#FFFFFF');
                 var borderRadius = (props.tooltipBorderRadius !== undefined ? props.tooltipBorderRadius : 8);
                 var shadow = (props.tooltipShadow !== false) ? '0 8px 25px rgba(0, 0, 0, 0.15), 0 3px 10px rgba(0, 0, 0, 0.1)' : 'none';
                 
@@ -674,6 +742,53 @@ function(qlik, $, properties, cssContent) {
         }, 100);
         
         $container.append($chart);
+    }
+    
+    // Helper function to extract color value from Qlik color objects
+    function getColorValue(colorProp, defaultColor) {
+        if (!colorProp) {
+            return defaultColor;
+        }
+        
+        // If it's already a valid color string, return it
+        if (typeof colorProp === 'string' && colorProp.length > 0) {
+            // Handle "none" or "transparent" values
+            if (colorProp.toLowerCase() === 'none' || colorProp.toLowerCase() === 'transparent') {
+                return defaultColor;
+            }
+            return colorProp;
+        }
+        
+        // If it's an object with a color property (Qlik color object)
+        if (typeof colorProp === 'object' && colorProp !== null) {
+            // Check for direct color property
+            if (colorProp.color && typeof colorProp.color === 'string') {
+                return colorProp.color;
+            }
+            // Check for value property
+            if (colorProp.value && typeof colorProp.value === 'string') {
+                return colorProp.value;
+            }
+            // Check for index (palette color)
+            if (typeof colorProp.index === 'number') {
+                // Qlik palette colors - return default for now
+                return defaultColor;
+            }
+            // Check for expression-based colors
+            if (colorProp.qAttributeExpressions && colorProp.qAttributeExpressions.length > 0) {
+                var expr = colorProp.qAttributeExpressions[0];
+                if (expr && expr.qExpression && typeof expr.qExpression === 'string') {
+                    return expr.qExpression;
+                }
+            }
+            
+            // Debug log to see what we're getting
+            if (window.console && console.log) {
+                console.log('Unhandled color property structure:', JSON.stringify(colorProp));
+            }
+        }
+        
+        return defaultColor;
     }
     
     function createSmoothPath(points) {

@@ -8,7 +8,8 @@
       "Bash(chmod:*)",
       "Bash(./build.sh:*)",
       "Bash(tar:*)",
-      "Bash(python3:*)"
+      "Bash(python3:*)",
+      "Bash(zip:*)"
     ],
     "deny": []
   },

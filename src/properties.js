@@ -277,6 +277,207 @@ define([], function() {
                         expression: "optional",
                         defaultValue: ""
                     },
+                    icon: {
+                        type: "items",
+                        label: "Icon Settings",
+                        items: {
+                            showIcon: {
+                                type: "boolean",
+                                ref: "showIcon",
+                                label: "Show Icon",
+                                defaultValue: false
+                            },
+                            iconType: {
+                                type: "string",
+                                ref: "iconType",
+                                label: "Icon",
+                                component: "dropdown",
+                                options: [{
+                                    value: "lui-icon--bar-chart",
+                                    label: "Bar Chart"
+                                }, {
+                                    value: "lui-icon--line-chart",
+                                    label: "Line Chart"
+                                }, {
+                                    value: "lui-icon--pie-chart",
+                                    label: "Pie Chart"
+                                }, {
+                                    value: "lui-icon--gauge-chart",
+                                    label: "Gauge"
+                                }, {
+                                    value: "lui-icon--kpi",
+                                    label: "KPI"
+                                }, {
+                                    value: "lui-icon--treemap",
+                                    label: "Treemap"
+                                }, {
+                                    value: "lui-icon--table",
+                                    label: "Table"
+                                }, {
+                                    value: "lui-icon--pivot-table",
+                                    label: "Pivot Table"
+                                }, {
+                                    value: "lui-icon--list",
+                                    label: "List"
+                                }, {
+                                    value: "lui-icon--grid",
+                                    label: "Grid"
+                                }, {
+                                    value: "lui-icon--star",
+                                    label: "Star"
+                                }, {
+                                    value: "lui-icon--triangle-top",
+                                    label: "Triangle Up"
+                                }, {
+                                    value: "lui-icon--triangle-bottom",
+                                    label: "Triangle Down"
+                                }, {
+                                    value: "lui-icon--tick",
+                                    label: "Checkmark"
+                                }, {
+                                    value: "lui-icon--minus",
+                                    label: "Minus"
+                                }, {
+                                    value: "lui-icon--plus",
+                                    label: "Plus"
+                                }, {
+                                    value: "lui-icon--info",
+                                    label: "Info"
+                                }, {
+                                    value: "lui-icon--calendar",
+                                    label: "Calendar"
+                                }, {
+                                    value: "lui-icon--clock",
+                                    label: "Clock"
+                                }, {
+                                    value: "lui-icon--database",
+                                    label: "Database"
+                                }, {
+                                    value: "lui-icon--play",
+                                    label: "Play"
+                                }, {
+                                    value: "lui-icon--pause",
+                                    label: "Pause"
+                                }, {
+                                    value: "lui-icon--stop",
+                                    label: "Stop"
+                                }, {
+                                    value: "lui-icon--flag",
+                                    label: "Flag"
+                                }, {
+                                    value: "lui-icon--tag",
+                                    label: "Tag"
+                                }, {
+                                    value: "lui-icon--key",
+                                    label: "Key"
+                                }, {
+                                    value: "lui-icon--lock",
+                                    label: "Lock"
+                                }, {
+                                    value: "lui-icon--unlock",
+                                    label: "Unlock"
+                                }, {
+                                    value: "lui-icon--link",
+                                    label: "Link"
+                                }, {
+                                    value: "lui-icon--unlink",
+                                    label: "Unlink"
+                                }, {
+                                    value: "lui-icon--reload",
+                                    label: "Reload"
+                                }, {
+                                    value: "lui-icon--sync",
+                                    label: "Sync"
+                                }, {
+                                    value: "lui-icon--warning-triangle",
+                                    label: "Warning"
+                                }, {
+                                    value: "lui-icon--bell",
+                                    label: "Bell"
+                                }, {
+                                    value: "lui-icon--user",
+                                    label: "User"
+                                }, {
+                                    value: "lui-icon--group",
+                                    label: "Group"
+                                }, {
+                                    value: "lui-icon--home",
+                                    label: "Home"
+                                }, {
+                                    value: "lui-icon--bookmark",
+                                    label: "Bookmark"
+                                }, {
+                                    value: "lui-icon--folder",
+                                    label: "Folder"
+                                }, {
+                                    value: "lui-icon--box",
+                                    label: "Box"
+                                }, {
+                                    value: "lui-icon--puzzle",
+                                    label: "Puzzle"
+                                }, {
+                                    value: "lui-icon--hub",
+                                    label: "Hub"
+                                }, {
+                                    value: "lui-icon--compass",
+                                    label: "Compass"
+                                }, {
+                                    value: "lui-icon--search",
+                                    label: "Search"
+                                }, {
+                                    value: "lui-icon--zoom-in",
+                                    label: "Zoom In"
+                                }, {
+                                    value: "lui-icon--zoom-out",
+                                    label: "Zoom Out"
+                                }],
+                                defaultValue: "lui-icon--gauge-chart",
+                                show: function(data) {
+                                    return data.showIcon;
+                                }
+                            },
+                            iconPosition: {
+                                type: "string",
+                                ref: "iconPosition",
+                                label: "Icon Position",
+                                component: "dropdown",
+                                options: [{
+                                    value: "before",
+                                    label: "Before Title"
+                                }, {
+                                    value: "above",
+                                    label: "Above Title (Large)"
+                                }],
+                                defaultValue: "before",
+                                show: function(data) {
+                                    return data.showIcon;
+                                }
+                            },
+                            iconColor: {
+                                type: "string",
+                                ref: "iconColor",
+                                label: "Icon Color",
+                                component: "color-picker",
+                                defaultValue: "#666666",
+                                show: function(data) {
+                                    return data.showIcon;
+                                }
+                            },
+                            iconSize: {
+                                type: "number",
+                                ref: "iconSize",
+                                label: "Icon Size",
+                                component: "slider",
+                                min: 12,
+                                max: 48,
+                                step: 2,
+                                defaultValue: 16,
+                                show: function(data) {
+                                    return data.showIcon;
+                                }
+                            }
+                        }
+                    },
                     showDataLabel: {
                         type: "boolean",
                         ref: "showDataLabel",
